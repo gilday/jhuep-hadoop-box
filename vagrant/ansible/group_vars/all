@@ -1,0 +1,10 @@
+---
+
+limits:
+  nofile: 8192
+  nproc: 10024
+
+jdk_rpm: jdk-7u75-linux-x64.rpm
+
+dfs_permissions: false
+
