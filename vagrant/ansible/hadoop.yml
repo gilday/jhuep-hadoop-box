@@ -1,0 +1,55 @@
+---
+# hadoop.yml
+#
+# install java + hadoop
+# configure hdfs and hadoop services
+
+# Oracle JDK
+- name: copy oracle jdk rpm
+  copy: src=files/{{ jdk_rpm }} dest=/tmp/{{ jdk_rpm }}
+- name: install oracle jdk
+  yum: "name=/tmp/{{ jdk_rpm }}"
+
+# Hadoop RPM
+- name: install hadoop repo
+  yum: 
+    name: "http://archive.cloudera.com/cdh4/one-click-install/redhat/6/x86_64/cloudera-cdh-4-0.x86_64.rpm"
+    disable_gpg_check: yes
+- name: install pseudo distributed configuration
+  yum: "name=hadoop-conf-pseudo"
+
+# Configure and Prepare HDFS
+- name: adjust hdfs permissions
+  template: "src=templates/hdfs-site.xml dest=/etc/hadoop/conf/hdfs-site.xml"
+- name: prepare file system
+  shell: "hdfs namenode -format"
+  args:
+    creates: "/var/lib/hadoop-hdfs/cache/hdfs/dfs/name"
+  sudo_user: hdfs
+# Start HDFS
+- name: "start hadoop-hdfs-namenode daemon"
+  service: "name=hadoop-hdfs-namenode state=started enabled=yes"
+- name: "start hadoop-hdfs-datanode daemon"
+  service: "name=hadoop-hdfs-datanode state=started enabled=yes"
+- name: "start hadoop-hdfs-secondarynamenode daemon"
+  service: "name=hadoop-hdfs-secondarynamenode state=started enabled=yes"
+
+# Seed HDFS
+- command: "hdfs dfs -mkdir -p /tmp/hadoop-yarn/staging/history/done_intermediate"
+  sudo_user: hdfs
+- command: "hdfs dfs -chown -R mapred:mapred /tmp/hadoop-yarn/staging"
+  sudo_user: hdfs
+- command: "hdfs dfs -chmod -R 1777 /tmp"
+  sudo_user: hdfs
+- command: "hdfs dfs -mkdir -p /var/log/hadoop-yarn"
+  sudo_user: hdfs
+- command: "hdfs dfs -chown yarn:mapred /var/log/hadoop-yarn"
+  sudo_user: hdfs
+
+- name: "start hadoop-yarn-resourcemanager daemon"
+  service: "name=hadoop-yarn-resourcemanager state=started enabled=yes"
+- name: "start hadoop-yarn-nodemanager daemon"
+  service: "name=hadoop-yarn-nodemanager state=started enabled=yes"
+- name: "start hadoop-mapreduce-historyserver daemon"
+  service: "name=hadoop-mapreduce-historyserver state=started enabled=yes"
+
