@@ -3,20 +3,11 @@
 #
 # download class input data
 
-- name: create input directory
-  file: path=/data/nasdaq state=directory
+- name: check if the data has already been downloaded
+  stat: path=/tmp/nasdaq-dividends.tar.gz
+  register: dividends_archive
 
-- name: download nasdaq dividends archive
-  get_url: "url=http://goo.gl/yWp3b3 dest=/tmp/nasdaq-dividends.tar.gz"
-
-- name: extract nasdaq dividends archive
-  unarchive: "copy=no src=/tmp/nasdaq-dividends.tar.gz dest=/data/nasdaq/ owner=hadoop group=hadoop creates=/data/nasdaq/dividends"
-
-- name: check if the directory has been renamed
-  stat: path=/data/nasdaq/dividends
-  register: dividends_dir
-
-- name: rename directory
-  command: "mv /data/nasdaq/NASDAQ_dividends /data/nasdaq/dividends"
-  when: not dividends_dir.stat.exists
+- name: run load data script
+  script: files/load-nasdaq-data.sh
+  when: not dividends_archive.stat.exists
 
