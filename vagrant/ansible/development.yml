@@ -1,0 +1,45 @@
+---
+# development.yml
+#
+# install java, desktop, and development tools
+
+# Software Development Workstation
+- name: groupinstall "Software Development Workstation"
+  yum: name="@Software Development Workstation"
+- name: install firefox
+  yum: name=firefox
+
+# Oracle JDK
+- name: copy oracle jdk rpm
+  copy: src=files/{{ jdk_rpm }} dest=/tmp/{{ jdk_rpm }}
+- name: install oracle jdk
+  yum: "name=/tmp/{{ jdk_rpm }}"
+- name: configure java environment variables
+  copy: src=files/java-home.sh dest=/etc/profile.d/java-home.sh
+
+# devtools
+- name: create devtools dir
+  file: path=/home/{{ dev_user }}/devtools state=directory owner={{ dev_user }} group={{ dev_user }}
+- name: create downloads dir
+  file: path=/home/{{ dev_user }}/downloads state=directory owner={{ dev_user }} group={{ dev_user }}
+- name: install vim
+  yum: name=vim-enhanced
+- name: install git
+  yum: name=git
+- name: download maven
+  get_url: "url=http://apache.petsads.us/maven/maven-3/{{ maven_version }}/binaries/apache-maven-{{ maven_version }}-bin.tar.gz dest=/home/{{ dev_user }}/downloads/apache-maven-{{ maven_version }}-bin.tar.gz"
+- name: install maven
+  unarchive: 
+    src: "/home/{{ dev_user }}/downloads/apache-maven-{{ maven_version }}-bin.tar.gz"
+    dest: "/home/{{ dev_user }}/devtools"
+    copy: no  
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+- name: symlink maven
+  file: 
+    path: "/home/{{ dev_user }}/devtools/maven"
+    src: "/home/{{ dev_user }}/devtools/apache-maven-{{ maven_version }}"
+    state: "link"
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+

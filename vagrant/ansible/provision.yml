@@ -6,6 +6,8 @@
   tasks:
     - include: base.yml
       tags: base
+    - include: development.yml
+      tags: development
     - include: hadoop.yml
       tags: hadoop
     - include: data.yml

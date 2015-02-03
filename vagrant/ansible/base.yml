@@ -1,16 +1,16 @@
 ---
 # base.yml
 #
-# add hadoop user and configure base OS
+# add dev user and configure base OS
 
 - name: "install libselinux-python for ansible"
   yum: "name=libselinux-python"
 
-# hadoop user
-- name: add class user
-  user: name=hadoop password=hadoop
+# dev user
+- name: add dev user
+  user: name={{ dev_user }}
 - name: add class user to sudoers
-  lineinfile: "dest=/etc/sudoers line='hadoop ALL=(ALL) NOPASSWD: ALL'"
+  lineinfile: "dest=/etc/sudoers line='{{ dev_user }} ALL=(ALL) NOPASSWD: ALL'"
 
 - name: turn off swap
   sysctl: name=vm.swappiness value=0 ignoreerrors=yes

@@ -4,12 +4,6 @@
 # install java + hadoop
 # configure hdfs and hadoop services
 
-# Oracle JDK
-- name: copy oracle jdk rpm
-  copy: src=files/{{ jdk_rpm }} dest=/tmp/{{ jdk_rpm }}
-- name: install oracle jdk
-  yum: "name=/tmp/{{ jdk_rpm }}"
-
 # Hadoop RPM
 - name: install hadoop repo
   yum: 
