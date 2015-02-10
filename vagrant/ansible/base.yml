@@ -6,6 +6,9 @@
 - name: "install libselinux-python for ansible"
   yum: "name=libselinux-python"
 
+- name: install xauth for x11 forwarding
+  yum: name=xauth
+
 # dev user
 - name: add dev user
   user: name={{ dev_user }}

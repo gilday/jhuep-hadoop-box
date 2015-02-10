@@ -4,8 +4,6 @@
 # install java, desktop, and development tools
 
 # Software Development Workstation
-- name: groupinstall "Software Development Workstation"
-  yum: name="@Software Development Workstation"
 - name: install firefox
   yum: name=firefox
 
@@ -26,12 +24,15 @@
   yum: name=vim-enhanced
 - name: install git
   yum: name=git
+
+# maven
 - name: download maven
   get_url: "url=http://apache.petsads.us/maven/maven-3/{{ maven_version }}/binaries/apache-maven-{{ maven_version }}-bin.tar.gz dest=/home/{{ dev_user }}/downloads/apache-maven-{{ maven_version }}-bin.tar.gz"
 - name: install maven
   unarchive: 
     src: "/home/{{ dev_user }}/downloads/apache-maven-{{ maven_version }}-bin.tar.gz"
     dest: "/home/{{ dev_user }}/devtools"
+    creates: "/home/{{ dev_user }}/devtools/apache-maven-{{ maven_version }}"
     copy: no  
     owner: "{{ dev_user }}"
     group: "{{ dev_user }}"
@@ -39,6 +40,31 @@
   file: 
     path: "/home/{{ dev_user }}/devtools/maven"
     src: "/home/{{ dev_user }}/devtools/apache-maven-{{ maven_version }}"
+    state: "link"
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+
+# IDEA
+- name: download idea
+  tags: idea
+  get_url: 
+    url: "https://download.jetbrains.com/idea/{{ idea_artifact }}"
+    dest: "/home/{{ dev_user }}/downloads/{{ idea_artifact }}"
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+- name: install idea
+  tags: idea
+  unarchive: 
+    src: "/home/{{ dev_user }}/downloads/{{ idea_artifact }}"
+    dest: "/home/{{ dev_user }}/devtools"
+    creates: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
+    copy: no 
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+- name: symlink idea
+  file:
+    path: "/home/{{ dev_user }}/devtools/idea"
+    src: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
     state: "link"
     owner: "{{ dev_user }}"
     group: "{{ dev_user }}"
