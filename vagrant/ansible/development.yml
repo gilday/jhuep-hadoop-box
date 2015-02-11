@@ -20,10 +20,16 @@
   file: path=/home/{{ dev_user }}/devtools state=directory owner={{ dev_user }} group={{ dev_user }}
 - name: create downloads dir
   file: path=/home/{{ dev_user }}/downloads state=directory owner={{ dev_user }} group={{ dev_user }}
-- name: install vim
-  yum: name=vim-enhanced
-- name: install git
-  yum: name=git
+- name: install epel repo
+  yum: name=epel-release
+- name: install basic software development packages (bash-completion, svn, git, vim, ruby, etc)
+  yum: name={{ item }}
+  with_items:
+    - bash-completion
+    - vim-enhanced
+    - git
+    - svn
+    - ruby
 
 # maven
 - name: download maven
