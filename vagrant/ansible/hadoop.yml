@@ -14,12 +14,21 @@
 
 # Configure and Prepare HDFS
 - name: adjust hdfs permissions
-  template: "src=templates/hdfs-site.xml dest=/etc/hadoop/conf/hdfs-site.xml"
+  template: "src=templates/hdfs-site.xml.j2 dest=/etc/hadoop/conf/hdfs-site.xml"
 - name: prepare file system
   shell: "hdfs namenode -format"
   args:
     creates: "/var/lib/hadoop-hdfs/cache/hdfs/dfs/name"
   sudo_user: hdfs
+
+# Configure Yarn and MapReduce
+- name: configure yarn
+  template: "src=templates/yarn-site.xml.j2 dest=/etc/hadoop/conf/yarn-site.xml"
+  notify: restart yarn
+- name: configure map reduce
+  template: "src=templates/mapred-site.xml.j2 dest=/etc/hadoop/conf/mapred-site.xml"
+  notify: restart mapreduce
+
 # Start HDFS
 - name: "start hadoop-hdfs-namenode daemon"
   service: "name=hadoop-hdfs-namenode state=started enabled=yes"

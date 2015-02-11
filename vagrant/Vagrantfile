@@ -6,8 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  # instructor recommends CentOS 6.5
-  config.vm.box = "chef/centos-6.5"
+  # instructor recommends CentOS 6.6
+  config.vm.box = "chef/centos-6.6"
   config.vm.box_check_update = false
   config.vm.hostname = "hadoop" # instructor provides hostname in the instructions
   config.vm.network "public_network"
@@ -16,6 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.name = "jhu-hadoop-dev"
       v.memory = 3072 # instructor recommends 3GB
       v.cpus = 2 # instructor recommends 2 cpu
+      v.gui = false # run head-less by default with minimal installation
   end
 
   config.ssh.forward_agent = true

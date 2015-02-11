@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+  <!-- begin 605.788 configuration -->
+  <property>
+    <name>yarn.app.mapreduce.am.job.reduce.rampup.limit</name>
+    <value>0.0</value>
+    <description>There is a limited number of containers, setting it to 0.0 will prevent reduce tasks from executing before ALL map tasks completed</description>
+  </property>
+
+  <property>
+    <name>mapred.submit.replication</name>
+    <value>1</value>
+    <description>HDFS replication factor for the job's resources</description>
+  </property>
+
+  <property>
+    <name>mapreduce.task.io.sort.mb</name>
+    <value>20</value>
+    <description>The total amount of buffer memory to use while sorting files, in megabytes. Default is 100</description>
+  </property>
+
+  <property>
+    <name>yarn.app.mapreduce.am.resource.mb</name>
+    <value>224</value>
+    <description>Maximum memory for MapReduce Application Master</description>
+  </property>
+
+  <property>
+    <name>yarn.app.mapreduce.am.command-opts</name>
+    <value>-Xmx60m -XX:MaxPermSize=90M</value>
+    <description>JVM settings for MapReduce Application Master</description>
+  </property>
+
+  <property>
+    <name>mapreduce.reduce.memory.mb</name>
+    <value>160</value>
+    <description>Maximum physical memory limit for a reduce task</description>
+  </property>
+
+  <property>
+    <name>mapreduce.reduce.java.opts</name>
+    <value>-Xmx64m -XX:MaxPermSize=40M</value>
+    <description>JVM settings for a reduce task</description>
+  </property>
+
+  <property>
+    <name>mapreduce.map.memory.mb</name>
+    <value>160</value>
+    <description>Maximum physical memory limit for a map task</description>
+  </property>
+
+  <property>
+    <name>mapreduce.map.java.opts</name>
+    <value>-Xmx64m -XX:MaxPermSize=40M</value>
+    <description>JVM settings for a reduce task</description>
+  </property>
+  <!-- end 605.788 configuration -->
+
+  <property>
+    <name>mapred.job.tracker</name>
+    <value>localhost:8021</value>
+  </property>
+
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+  </property>
+
+  <property>
+    <name>mapreduce.jobhistory.address</name>
+    <value>localhost:10020</value>
+  </property>
+  <property>
+    <name>mapreduce.jobhistory.webapp.address</name>
+    <value>localhost:19888</value>
+  </property>
+
+  <property>
+    <description>To set the value of tmp directory for map and reduce tasks.</description>
+    <name>mapreduce.task.tmp.dir</name>
+    <value>/var/lib/hadoop-mapreduce/cache/${user.name}/tasks</value>
+  </property>
+
+</configuration>

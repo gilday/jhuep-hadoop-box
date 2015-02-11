@@ -12,4 +12,6 @@
       tags: hadoop
     - include: data.yml
       tags: data
+  handlers:
+    - include: hadoop-handlers.yml
 
