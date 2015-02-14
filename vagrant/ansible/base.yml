@@ -5,19 +5,25 @@
 
 - name: "install libselinux-python for ansible"
   yum: "name=libselinux-python"
+  sudo: yes
 
 - name: install xauth for x11 forwarding
   yum: name=xauth
+  sudo: yes
 
 # dev user
 - name: add dev user
   user: name={{ dev_user }}
+  sudo: yes
 - name: add class user to sudoers
   lineinfile: "dest=/etc/sudoers line='{{ dev_user }} ALL=(ALL) NOPASSWD: ALL'"
+  sudo: yes
 
 - name: turn off swap
   sysctl: name=vm.swappiness value=0 ignoreerrors=yes
+  sudo: yes
 
 - name: increase native threads and open files
   template: src=templates/limits.conf.j2 dest=/etc/security/limits.conf
+  sudo: yes
 

@@ -6,7 +6,9 @@
   with_items:
     - "hadoop-yarn-nodemanager"
     - "hadoop-yarn-resourcemanager"
+  sudo: yes
 
 - name: restart mapreduce
   service: "name=hadoop-mapreduce-historyserver state=restarted"
+  sudo: yes
 

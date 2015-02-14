@@ -6,14 +6,17 @@
 # Software Development Workstation
 - name: install firefox
   yum: name=firefox
+  sudo: yes
 
 # Oracle JDK
 - name: copy oracle jdk rpm
   copy: src=files/{{ jdk_rpm }} dest=/tmp/{{ jdk_rpm }}
 - name: install oracle jdk
   yum: "name=/tmp/{{ jdk_rpm }}"
+  sudo: yes
 - name: configure java environment variables
   copy: src=files/java-home.sh dest=/etc/profile.d/java-home.sh
+  sudo: yes
 
 # devtools
 - name: create devtools dir
@@ -22,7 +25,8 @@
   file: path=/home/{{ dev_user }}/downloads state=directory owner={{ dev_user }} group={{ dev_user }}
 - name: install epel repo
   yum: name=epel-release
-- name: install basic software development packages (bash-completion, svn, git, vim, ruby, etc)
+  sudo: yes
+- name: install basic software development packages
   yum: name={{ item }}
   with_items:
     - bash-completion
@@ -30,6 +34,7 @@
     - git
     - svn
     - ruby
+  sudo: yes
 
 # maven
 - name: download maven
@@ -39,16 +44,12 @@
     src: "/home/{{ dev_user }}/downloads/apache-maven-{{ maven_version }}-bin.tar.gz"
     dest: "/home/{{ dev_user }}/devtools"
     creates: "/home/{{ dev_user }}/devtools/apache-maven-{{ maven_version }}"
-    copy: no  
-    owner: "{{ dev_user }}"
-    group: "{{ dev_user }}"
+    copy: no
 - name: symlink maven
   file: 
     path: "/home/{{ dev_user }}/devtools/maven"
     src: "/home/{{ dev_user }}/devtools/apache-maven-{{ maven_version }}"
     state: "link"
-    owner: "{{ dev_user }}"
-    group: "{{ dev_user }}"
 
 # IDEA
 - name: download idea
@@ -56,8 +57,6 @@
   get_url: 
     url: "https://download.jetbrains.com/idea/{{ idea_artifact }}"
     dest: "/home/{{ dev_user }}/downloads/{{ idea_artifact }}"
-    owner: "{{ dev_user }}"
-    group: "{{ dev_user }}"
 - name: install idea
   tags: idea
   unarchive: 
@@ -72,6 +71,20 @@
     path: "/home/{{ dev_user }}/devtools/idea"
     src: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
     state: "link"
-    owner: "{{ dev_user }}"
+
+# Eclipse
+- name: download eclipse
+  tags: eclipse
+  get_url:
+    url: "http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/luna/SR1a/eclipse-java-luna-SR1a-linux-gtk-x86_64.tar.gz&r=1"
+    dest: "/home/{{ dev_user }}/downloads/eclipse-java-luna-SR1a-linux-gtk-x86_64.tar.gz"
+- name: install eclipse
+  tags: eclipse
+  unarchive:
+    src: "/home/{{ dev_user }}/downloads/eclipse-java-luna-SR1a-linux-gtk-x86_64.tar.gz"
+    dest: "/home/{{ dev_user }}/devtools"
+    creates: "/home/{{ dev_user }}/devtools/eclipse"
+    copy: no
+    user: "{{ dev_user }}"
     group: "{{ dev_user }}"
 

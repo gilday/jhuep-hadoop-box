@@ -11,3 +11,9 @@
   script: files/load-nasdaq-data.sh
   when: not dividends_archive.stat.exists
 
+- name: clone class hadoop samples
+  tags: samples
+  command: "svn co https://hadoop-course.googlecode.com/svn/trunk/JHU605.788/HadoopSamples"
+  args:
+    creates: "/home/{{ dev_user }}/HadoopSamples"
+
