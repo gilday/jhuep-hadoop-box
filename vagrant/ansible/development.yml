@@ -29,6 +29,7 @@
 - name: install basic software development packages
   yum: name={{ item }}
   with_items:
+    - unzip
     - bash-completion
     - vim-enhanced
     - git

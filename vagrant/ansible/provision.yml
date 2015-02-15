@@ -10,8 +10,8 @@
       tags: development
     - include: hadoop.yml
       tags: hadoop
-    - include: data.yml
-      tags: data
+    - include: class-data.yml
+      tags: class-data
   handlers:
     - include: hadoop-handlers.yml
 
