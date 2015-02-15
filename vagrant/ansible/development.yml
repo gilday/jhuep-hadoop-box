@@ -85,6 +85,6 @@
     dest: "/home/{{ dev_user }}/devtools"
     creates: "/home/{{ dev_user }}/devtools/eclipse"
     copy: no
-    user: "{{ dev_user }}"
+    owner: "{{ dev_user }}"
     group: "{{ dev_user }}"
 
