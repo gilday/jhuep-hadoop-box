@@ -42,3 +42,7 @@ The project installs the ultimate verison of Idea because this is a university
 course and the ultimate version is available to university students and
 professors with a free academic license https://www.jetbrains.com/student/
 
+### VBox Shares
+
+X11 can be frustrating. Another way to work with the box is to share the project
+directory with the machine using VirtualBox shares.
