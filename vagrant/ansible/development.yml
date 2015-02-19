@@ -20,9 +20,9 @@
 
 # devtools
 - name: create devtools dir
-  file: path=/home/{{ dev_user }}/devtools state=directory owner={{ dev_user }} group={{ dev_user }}
+  file: path=/home/{{ dev_user }}/devtools state=directory
 - name: create downloads dir
-  file: path=/home/{{ dev_user }}/downloads state=directory owner={{ dev_user }} group={{ dev_user }}
+  file: path=/home/{{ dev_user }}/downloads state=directory
 - name: install epel repo
   yum: name=epel-release
   sudo: yes
@@ -36,6 +36,8 @@
     - svn
     - ruby
   sudo: yes
+- name: create personal bin
+  file: path=/home/{{ dev_user }}/bin state=directory
 
 # maven
 - name: download maven
@@ -72,6 +74,10 @@
     path: "/home/{{ dev_user }}/devtools/idea"
     src: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
     state: "link"
+  tags: idea
+- name: link idea executable to bin
+  file: "state=link path=/home/{{ dev_user }}/bin/idea src=/home/{{ dev_user }}/devtools/idea/bin/idea.sh"
+  tags: idea
 
 # Eclipse
 - name: download eclipse
@@ -88,4 +94,10 @@
     copy: no
     owner: "{{ dev_user }}"
     group: "{{ dev_user }}"
+- name: link eclipse executable to bin
+  tags: eclipse
+  file: "state=link path=/home/{{ dev_user }}/bin/eclipse src=/home/{{ dev_user }}/devtools/eclipse/eclipse"
+
+- name: set path in bashrc
+  template: "src=templates/bashrc dest=/home/{{ dev_user }}/.bashrc"
 

@@ -24,6 +24,9 @@
     creates: "/var/lib/hadoop-hdfs/cache/hdfs/dfs/name"
   sudo_user: hdfs
   sudo: yes
+- name: configure hadoop-env.sh
+  template: "src=templates/hadoop-env.sh.j2 dest=/etc/hadoop/conf/hadoop-env.sh"
+  sudo: yes
 
 # Configure Yarn and MapReduce
 - name: configure yarn

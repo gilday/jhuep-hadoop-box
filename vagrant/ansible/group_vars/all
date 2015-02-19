@@ -1,16 +1,20 @@
 # vim: set ft=yaml
 ---
 
+# System
 dev_user: vagrant
-
 limits:
   nofile: 8192
   nproc: 10024
 
 jdk_rpm: jdk-7u75-linux-x64.rpm
 
+# HDFS
 dfs_permissions: false
+hadoop_heapsize: 512
 
+
+# Dependencies
 maven_version: 3.2.5
 idea_version: 14.0.3
 # idea_dir_unpackaged is the name of the directory that comes out of the tarball
