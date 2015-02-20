@@ -50,3 +50,9 @@ this directory's parent to `/project` on the guest file system. This set-up
 let's you edit code on the host, then log into the guest to build, debug, and
 test.
 
+    605.788 (this directory is synced with the guest)
+    |
+    +-- jhuep-hadoop-box (this vagrant project)
+    |
+    `-- assignments (code for class assignments)
+
