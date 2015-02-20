@@ -2,7 +2,7 @@
 
 JHU 605.788 Big Data Processing with Hadoop: Vagrant project for standing up
 hadoop in pseudo-distributed mode for development. Developed and tested on Mac
-OSX Mavericks
+OSX Mavericks. Configured using instructions from class slides.
 
 ## Features
 
@@ -45,4 +45,8 @@ professors with a free academic license https://www.jetbrains.com/student/
 ### VBox Shares
 
 X11 can be frustrating. Another way to work with the box is to share the project
-directory with the machine using VirtualBox shares.
+directory with the machine using VirtualBox shares. The Vagrant script attaches
+this directory's parent to `/project` on the guest file system. This set-up
+let's you edit code on the host, then log into the guest to build, debug, and
+test.
+
