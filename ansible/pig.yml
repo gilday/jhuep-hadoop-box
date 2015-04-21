@@ -1,0 +1,9 @@
+---
+# pig.yaml
+#
+# installs pig
+
+- name: install pig
+  yum: name=pig
+  sudo: yes
+

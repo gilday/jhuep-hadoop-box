@@ -26,3 +26,7 @@ export HADOOP_HEAPSIZE={{ hadoop_heapsize }}
 # Extra Java runtime options.  Empty by default.
 #export HADOOP_OPTS="-Djava.net.preferIPv4Stack=true $HADOOP_CLIENT_OPTS"
 #export HADOOP_CLIENT_OPTS="-Xmx128m $HADOOP_CLIENT_OPTS"
+#
+# Hadoop classpath
+export HADOOP_CLASSPATH=/usr/lib/hbase/*:${HADOOP_CLASSPATH}
+

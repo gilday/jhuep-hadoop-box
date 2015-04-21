@@ -1,0 +1,23 @@
+---
+# hbase.yaml
+#
+# installs hbase
+
+- name: install hbase
+  yum: name="hbase-master"
+  sudo: yes
+
+- name: configure hbase site
+  template: src="templates/hbase-site.xml.j2" dest="{{ hbase_conf_dir }}/hbase-site.xml"
+  notify: restart hbase
+  sudo: yes
+
+- name: configure hbase env
+  template: src="templates/hbase-env.sh.j2" dest="{{ hbase_conf_dir }}/hbase-env.sh"
+  notify: restart hbase
+  sudo: yes
+
+- name: start hbase
+  service: name="hbase-master" enabled=yes
+  sudo: yes
+

@@ -12,3 +12,7 @@
   service: "name=hadoop-mapreduce-historyserver state=restarted"
   sudo: yes
 
+- name: restart hbase
+  service: "name=hbase-master state=restarted"
+  sudo: yes
+

@@ -10,6 +10,10 @@
       tags: development
     - include: hadoop.yml
       tags: hadoop
+    - include: pig.yml
+      tags: pig
+    - include: hbase.yml
+      tags: hbase
     - include: class-data.yml
       tags: class-data
   handlers:

@@ -13,6 +13,9 @@ jdk_rpm: jdk-7u75-linux-x64.rpm
 dfs_permissions: false
 hadoop_heapsize: 512
 
+# HBASE
+hbase_conf_dir: /etc/hbase/conf
+hbase_heapsize: 256
 
 # Dependencies
 maven_version: 3.2.5
