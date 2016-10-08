@@ -5,29 +5,46 @@
 
 # Software Development Workstation
 - name: install firefox
-  yum: name=firefox
+  yum:
+    name: firefox
+    state: present
   sudo: yes
 
-# Oracle JDK
-- name: copy oracle jdk rpm
-  copy: src=files/{{ jdk_rpm }} dest=/tmp/{{ jdk_rpm }}
+
 - name: install oracle jdk
-  yum: "name=/tmp/{{ jdk_rpm }}"
-  sudo: yes
-- name: configure java environment variables
-  copy: src=files/java-home.sh dest=/etc/profile.d/java-home.sh
-  sudo: yes
+  include: oracle-jdk.yml
+  when: "{{ jdk_rpm is defined }}"
+
+
+- name: install openjdk
+  yum:
+    name: java-1.8.0-openjdk
+  when: "{{ jdk_rpm is not defined }}"
+  become: yes
+
 
 # devtools
 - name: create devtools dir
-  file: path=/home/{{ dev_user }}/devtools state=directory
+  file:
+    path: "/home/{{ dev_user }}/devtools"
+    state: directory
+
+
 - name: create downloads dir
-  file: path=/home/{{ dev_user }}/downloads state=directory
+  file:
+    path: "/home/{{ dev_user }}/downloads"
+    state: directory
+
+
 - name: install epel repo
-  yum: name=epel-release
+  yum:
+    name: epel-release
   sudo: yes
+
+
 - name: install basic software development packages
-  yum: name={{ item }}
+  yum:
+    name: "{{ item }}"
   with_items:
     - unzip
     - bash-completion
@@ -36,48 +53,86 @@
     - svn
     - ruby
   sudo: yes
+
+
 - name: create personal bin
-  file: path=/home/{{ dev_user }}/bin state=directory
+  file:
+    path: "/home/{{ dev_user }}/bin"
+    state: directory
 
 # maven
 - name: download maven
-  get_url: "url=http://apache.petsads.us/maven/maven-3/{{ maven_version }}/binaries/apache-maven-{{ maven_version }}-bin.tar.gz dest=/home/{{ dev_user }}/downloads/apache-maven-{{ maven_version }}-bin.tar.gz"
+  get_url:
+    url: "http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/{{ maven_version }}/binaries/apache-maven-{{ maven_version }}-bin.tar.gz"
+    dest: "/home/{{ dev_user }}/downloads/apache-maven-{{ maven_version }}-bin.tar.gz"
+
+
 - name: install maven
   unarchive: 
     src: "/home/{{ dev_user }}/downloads/apache-maven-{{ maven_version }}-bin.tar.gz"
     dest: "/home/{{ dev_user }}/devtools"
     creates: "/home/{{ dev_user }}/devtools/apache-maven-{{ maven_version }}"
     copy: no
+
+
 - name: symlink maven
   file: 
     path: "/home/{{ dev_user }}/devtools/maven"
     src: "/home/{{ dev_user }}/devtools/apache-maven-{{ maven_version }}"
     state: "link"
 
-# IDEA
-- name: download idea
-  tags: idea
-  get_url: 
-    url: "https://download.jetbrains.com/idea/{{ idea_artifact }}"
-    dest: "/home/{{ dev_user }}/downloads/{{ idea_artifact }}"
-- name: install idea
-  tags: idea
-  unarchive: 
-    src: "/home/{{ dev_user }}/downloads/{{ idea_artifact }}"
-    dest: "/home/{{ dev_user }}/devtools"
-    creates: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
-    copy: no 
-    owner: "{{ dev_user }}"
-    group: "{{ dev_user }}"
-- name: symlink idea
-  file:
-    path: "/home/{{ dev_user }}/devtools/idea"
-    src: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
-    state: "link"
-  tags: idea
-- name: link idea executable to bin
-  file: "state=link path=/home/{{ dev_user }}/bin/idea src=/home/{{ dev_user }}/devtools/idea/bin/idea.sh"
-  tags: idea
+
+- name: install httplib2
+  pip:
+    name: httplib2
+  connection: local
+
+
+- name: find latest intellij version
+  uri:
+    url: "https://data.services.jetbrains.com/products/releases?code=IIU%2CIIC&latest=true&type=release"
+    return_content: yes
+    validate_certs: no
+    body_format: json
+  register: intellij_releases_response
+
+
+- set_fact:
+    intellij_version: "{{ intellij_releases_response.json.IIC.0.version }}"
+
+
+- name: download intellij
+  get_url:
+    url: "{{intellij_url}}"
+    dest: "/home/{{ dev_user }}/downloads/{{ idea_url | basename }}"
+
+
+#- name: install idea
+#  tags: idea
+#  unarchive: 
+#    src: "/home/{{ dev_user }}/downloads/{{ idea_url | basename }}"
+#    dest: "/home/{{ dev_user }}/devtools"
+#    creates: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
+#    copy: no 
+#    owner: "{{ dev_user }}"
+#    group: "{{ dev_user }}"
+
+
+#- name: symlink idea
+#  file:
+#    path: "/home/{{ dev_user }}/devtools/idea"
+#    src: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
+#    state: "link"
+#  tags: idea
+
+
+#- name: link idea executable to bin
+#   file:
+#    state: link
+#    path: "/home/{{ dev_user }}/bin/idea"
+#    src: "/home/{{ dev_user }}/devtools/idea/bin/idea.sh"
+#  tags: idea
+
 
 # Eclipse
 - name: download eclipse
@@ -85,6 +140,8 @@
   get_url:
     url: "http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/luna/SR1a/eclipse-java-luna-SR1a-linux-gtk-x86_64.tar.gz&r=1"
     dest: "/home/{{ dev_user }}/downloads/eclipse-java-luna-SR1a-linux-gtk-x86_64.tar.gz"
+
+
 - name: install eclipse
   tags: eclipse
   unarchive:
@@ -94,10 +151,17 @@
     copy: no
     owner: "{{ dev_user }}"
     group: "{{ dev_user }}"
+
+
 - name: link eclipse executable to bin
   tags: eclipse
-  file: "state=link path=/home/{{ dev_user }}/bin/eclipse src=/home/{{ dev_user }}/devtools/eclipse/eclipse"
+  file:
+    state: link
+    path: "/home/{{ dev_user }}/bin/eclipse"
+    src: "/home/{{ dev_user }}/devtools/eclipse/eclipse"
+
 
 - name: set path in bashrc
-  template: "src=templates/bashrc dest=/home/{{ dev_user }}/.bashrc"
-
+  template:
+    src: templates/bashrc
+    dest: "/home/{{ dev_user }}/.bashrc"

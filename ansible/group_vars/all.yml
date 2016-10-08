@@ -7,7 +7,10 @@ limits:
   nofile: 8192
   nproc: 10024
 
-jdk_rpm: jdk-7u75-linux-x64.rpm
+
+# IDEA
+idea_url: https://download-cf.jetbrains.com/idea/ideaIC-2016.2.4.tar.gz 
+idea_sha256: bfd1bc75386d22bf9f0559b4894b547689383bd69c4038a1516a6e2c00f96742
 
 # HDFS
 dfs_permissions: false
@@ -18,9 +21,8 @@ hbase_conf_dir: /etc/hbase/conf
 hbase_heapsize: 256
 
 # Dependencies
-maven_version: 3.2.5
+maven_version: 3.3.9
 idea_version: 14.0.3
 # idea_dir_unpackaged is the name of the directory that comes out of the tarball
 idea_dir_unpackaged: idea-IU-139.1117.1
 idea_artifact: ideaIU-{{ idea_version }}.tar.gz
-

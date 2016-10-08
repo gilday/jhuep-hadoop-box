@@ -14,8 +14,5 @@
       tags: pig
     - include: hbase.yml
       tags: hbase
-    - include: class-data.yml
-      tags: class-data
   handlers:
     - include: hadoop-handlers.yml
-

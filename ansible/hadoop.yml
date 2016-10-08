@@ -53,7 +53,7 @@
 - command: "hdfs dfs -mkdir -p /tmp/hadoop-yarn/staging/history/done_intermediate"
   sudo_user: hdfs
   sudo: yes
-- command: "hdfs dfs -chown -R mapred:mapred /tmp/hadoop-yarn/staging"
+- command: "hdfs dfs -chown -R vagrant:supergroup /tmp/hadoop-yarn/staging"
   sudo_user: hdfs
   sudo: yes
 - command: "hdfs dfs -chmod -R 1777 /tmp"

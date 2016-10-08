@@ -6,8 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  # instructor recommends CentOS 6.6
-  config.vm.box = "chef/centos-6.6"
+  # instructor recommends CentOS 6.7
+  config.vm.box = "bento/centos-6.7"
   config.vm.box_check_update = false
   config.vm.hostname = "hadoop" # instructor provides hostname in the instructions
   config.vm.network "public_network"

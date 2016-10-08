@@ -1,0 +1,20 @@
+# Oracle JDK
+
+- name: copy oracle jdk rpm
+  copy:
+    src: "{{ jdk_rpm }}"
+    dest: "/tmp/{{ jdk_rpm | basename }}"
+
+
+- name: install oracle jdk
+  yum:
+    name: "/tmp/{{ jdk_rpm }}"
+    state: present
+  sudo: yes
+
+
+- name: configure java environment variables
+  copy:
+    src: files/java-home.sh
+    dest: /etc/profile.d/java-home.sh
+  sudo: yes

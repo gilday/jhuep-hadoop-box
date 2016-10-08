@@ -18,12 +18,12 @@ OSX Mavericks. Configured using instructions from class slides.
 ## Setting-Up the Box
 
 1. Install Vagrant
-2. Install Ansible
+2. Install Ansible (and `pip install httplib2`)
 3. Install VirtualBox
-4. Download the Oracle JDK RPM and copy it to the `files` directory. Change (or
-   override) the `jdk_rpm` ansible variable to match the name of the RPM in
-   `files`. This step cannot be automated because Oracle requires users to agree
-   to their terms before downloading the artifact
+4. Optionally download the Oracle JDK RPM and set the `jdk_rpm` variable. If
+  `jdk_rpm` is not set, ansible will install java-1.8.0-openjdk. This step cannot
+   be automated because Oracle requires users to agree to their terms before
+   downloading the artifact
 5. Run `vagrant up`
 
 ## Working with the Box
