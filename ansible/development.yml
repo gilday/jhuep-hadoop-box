@@ -1,15 +1,7 @@
 ---
 # development.yml
 #
-# install java, desktop, and development tools
-
-# Software Development Workstation
-- name: install firefox
-  yum:
-    name: firefox
-    state: present
-  sudo: yes
-
+# install java and development tools
 
 - name: install oracle jdk
   include: oracle-jdk.yml
@@ -39,19 +31,22 @@
 - name: install epel repo
   yum:
     name: epel-release
+    state: present
   sudo: yes
 
 
 - name: install basic software development packages
   yum:
     name: "{{ item }}"
+    state: present
   with_items:
-    - unzip
     - bash-completion
-    - vim-enhanced
+    - firefox
     - git
-    - svn
     - ruby
+    - svn
+    - unzip
+    - vim-enhanced
   sudo: yes
 
 
@@ -59,6 +54,7 @@
   file:
     path: "/home/{{ dev_user }}/bin"
     state: directory
+
 
 # maven
 - name: download maven
@@ -80,85 +76,6 @@
     path: "/home/{{ dev_user }}/devtools/maven"
     src: "/home/{{ dev_user }}/devtools/apache-maven-{{ maven_version }}"
     state: "link"
-
-
-- name: install httplib2
-  pip:
-    name: httplib2
-  connection: local
-
-
-- name: find latest intellij version
-  uri:
-    url: "https://data.services.jetbrains.com/products/releases?code=IIU%2CIIC&latest=true&type=release"
-    return_content: yes
-    validate_certs: no
-    body_format: json
-  register: intellij_releases_response
-
-
-- set_fact:
-    intellij_version: "{{ intellij_releases_response.json.IIC.0.version }}"
-
-
-- name: download intellij
-  get_url:
-    url: "{{intellij_url}}"
-    dest: "/home/{{ dev_user }}/downloads/{{ idea_url | basename }}"
-
-
-#- name: install idea
-#  tags: idea
-#  unarchive: 
-#    src: "/home/{{ dev_user }}/downloads/{{ idea_url | basename }}"
-#    dest: "/home/{{ dev_user }}/devtools"
-#    creates: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
-#    copy: no 
-#    owner: "{{ dev_user }}"
-#    group: "{{ dev_user }}"
-
-
-#- name: symlink idea
-#  file:
-#    path: "/home/{{ dev_user }}/devtools/idea"
-#    src: "/home/{{ dev_user }}/devtools/{{ idea_dir_unpackaged }}"
-#    state: "link"
-#  tags: idea
-
-
-#- name: link idea executable to bin
-#   file:
-#    state: link
-#    path: "/home/{{ dev_user }}/bin/idea"
-#    src: "/home/{{ dev_user }}/devtools/idea/bin/idea.sh"
-#  tags: idea
-
-
-# Eclipse
-- name: download eclipse
-  tags: eclipse
-  get_url:
-    url: "http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/luna/SR1a/eclipse-java-luna-SR1a-linux-gtk-x86_64.tar.gz&r=1"
-    dest: "/home/{{ dev_user }}/downloads/eclipse-java-luna-SR1a-linux-gtk-x86_64.tar.gz"
-
-
-- name: install eclipse
-  tags: eclipse
-  unarchive:
-    src: "/home/{{ dev_user }}/downloads/eclipse-java-luna-SR1a-linux-gtk-x86_64.tar.gz"
-    dest: "/home/{{ dev_user }}/devtools"
-    creates: "/home/{{ dev_user }}/devtools/eclipse"
-    copy: no
-    owner: "{{ dev_user }}"
-    group: "{{ dev_user }}"
-
-
-- name: link eclipse executable to bin
-  tags: eclipse
-  file:
-    state: link
-    path: "/home/{{ dev_user }}/bin/eclipse"
-    src: "/home/{{ dev_user }}/devtools/eclipse/eclipse"
 
 
 - name: set path in bashrc

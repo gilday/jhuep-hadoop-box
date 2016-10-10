@@ -8,4 +8,3 @@ fi
 # User specific aliases and functions
 PATH=$PATH:$HOME/bin
 PATH=$PATH:$HOME/devtools/maven/bin
-
