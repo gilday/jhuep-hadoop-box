@@ -2,17 +2,24 @@
 # hadoop-handlers.yml
 
 - name: restart yarn
-  service: "name={{ item }} state=restarted"
+  service:
+    name: "{{ item }}"
+    state: restarted
   with_items:
-    - "hadoop-yarn-nodemanager"
-    - "hadoop-yarn-resourcemanager"
-  sudo: yes
+    - hadoop-yarn-nodemanager
+    - hadoop-yarn-resourcemanager
+  become: yes
+
 
 - name: restart mapreduce
-  service: "name=hadoop-mapreduce-historyserver state=restarted"
-  sudo: yes
+  service:
+    name: hadoop-mapreduce-historyserver
+    state: restarted
+  become: yes
+
 
 - name: restart hbase
-  service: "name=hbase-master state=restarted"
-  sudo: yes
-
+  service:
+    name: hbase-master
+    state: restarted
+  become: yes

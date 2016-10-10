@@ -4,20 +4,30 @@
 # installs hbase
 
 - name: install hbase
-  yum: name="hbase-master"
-  sudo: yes
+  yum:
+    name: hbase-master
+    state: present
+  become: yes
+
 
 - name: configure hbase site
-  template: src="templates/hbase-site.xml.j2" dest="{{ hbase_conf_dir }}/hbase-site.xml"
+  template:
+    src: templates/hbase-site.xml.j2
+    dest: "{{ hbase_conf_dir }}/hbase-site.xml"
   notify: restart hbase
-  sudo: yes
+  become: yes
+
 
 - name: configure hbase env
-  template: src="templates/hbase-env.sh.j2" dest="{{ hbase_conf_dir }}/hbase-env.sh"
+  template:
+    src: templates/hbase-env.sh.j2
+    dest: "{{ hbase_conf_dir }}/hbase-env.sh"
   notify: restart hbase
-  sudo: yes
+  become: yes
+
 
 - name: start hbase
-  service: name="hbase-master" enabled=yes
-  sudo: yes
-
+  service:
+    name: hbase-master
+    enabled: yes
+  become: yes

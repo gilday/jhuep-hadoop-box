@@ -8,13 +8,13 @@
 
 - name: install oracle jdk
   yum:
-    name: "/tmp/{{ jdk_rpm }}"
+    name: "/tmp/{{ jdk_rpm | basename }}"
     state: present
-  sudo: yes
+  become: yes
 
 
 - name: configure java environment variables
   copy:
     src: files/java-home.sh
     dest: /etc/profile.d/java-home.sh
-  sudo: yes
+  become: yes

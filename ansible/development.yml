@@ -11,6 +11,7 @@
 - name: install openjdk
   yum:
     name: java-1.8.0-openjdk
+    state: present
   when: "{{ jdk_rpm is not defined }}"
   become: yes
 
@@ -32,7 +33,7 @@
   yum:
     name: epel-release
     state: present
-  sudo: yes
+  become: yes
 
 
 - name: install basic software development packages
@@ -47,7 +48,7 @@
     - svn
     - unzip
     - vim-enhanced
-  sudo: yes
+  become: yes
 
 
 - name: create personal bin

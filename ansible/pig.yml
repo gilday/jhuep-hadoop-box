@@ -4,6 +4,7 @@
 # installs pig
 
 - name: install pig
-  yum: name=pig
-  sudo: yes
-
+  yum:
+    name: pig
+    state: present
+  become: yes
